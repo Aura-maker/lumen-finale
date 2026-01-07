@@ -17,7 +17,13 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Configurazione Prisma
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL || "postgresql://postgres.uqvdiqmioqnvywmkchma:Levinoliver18_@aws-1-eu-west-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
+    }
+  }
+});
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
