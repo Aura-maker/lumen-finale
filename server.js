@@ -104,6 +104,8 @@ console.log('📁 Percorso contenuti:', CONTENT_PATH);
 async function initializeDatabase() {
   try {
     console.log('🔄 Inizializzando database...');
+console.log('🔍 DATABASE_URL:', process.env.DATABASE_URL ? 'CONFIGURATO' : 'MANCANTE');
+console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
     
     // Verifica se ci sono già dati
     const subjectCount = await prisma.subject.count();
