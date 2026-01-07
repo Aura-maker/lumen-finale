@@ -11,6 +11,7 @@ const { PrismaClient } = require('@prisma/client');
 const OpenAI = require('openai');
 const helmet = require('helmet');
 const { sanitizeMiddleware, sanitizeAIOutput, validateQuizInput, validateFlashcardInput, validateSummaryInput } = require('./middleware/sanitize.middleware');
+const { register, login, getProfile } = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -77,6 +78,11 @@ app.use(limiter);
 app.use(sanitizeMiddleware);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static('public'));
+
+// ROUTES DI AUTENTICAZIONE
+app.post('/api/auth/registrati', register);
+app.post('/api/auth/login', login);
+app.get('/api/auth/me', getProfile);
 
 // Percorso ai contenuti
 const CONTENT_PATH = path.join(__dirname, '..', 'files', 'src', 'data');
