@@ -16,10 +16,10 @@ const { register, login, getProfile } = require('./routes/auth');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Configurazione Prisma - SQLITE FUNZIONANTE
+// Configurazione Prisma - POSTGRESQL DEFINITIVO
 const prisma = new PrismaClient();
 
-console.log('🔍 Using SQLite - funzionante garantito');
+console.log('🔍 Using PostgreSQL - hardcoded in schema');
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
