@@ -16,10 +16,10 @@ const { register, login, getProfile } = require('./routes/auth');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Configurazione Prisma - Forza PostgreSQL
-const DATABASE_URL = process.env.DATABASE_URL || "postgresql://postgres.uqvdiqmioqnvywmkchma:Levinoliver18_@aws-1-eu-west-2.pooler.supabase.com:6543/postgres?pgbouncer=true";
+// Configurazione Prisma - HARDCODE PostgreSQL
+const DATABASE_URL = "postgresql://postgres.uqvdiqmioqnvywmkchma:Levinoliver18_@aws-1-eu-west-2.pooler.supabase.com:6543/postgres?pgbouncer=true";
 
-console.log('🔍 Using DATABASE_URL:', DATABASE_URL.substring(0, 50) + '...');
+console.log('🔍 Using HARDCODED PostgreSQL DATABASE_URL');
 
 const prisma = new PrismaClient({
   datasources: {
