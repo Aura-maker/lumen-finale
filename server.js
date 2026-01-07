@@ -17,6 +17,7 @@ const PORT = process.env.PORT || 4000;
 
 // Configurazione Prisma
 const prisma = new PrismaClient({
+  adapter: undefined, // Use default PostgreSQL adapter
   __internal: {
     engine: {
       binaryPath: undefined
