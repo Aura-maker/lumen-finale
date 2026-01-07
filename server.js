@@ -16,11 +16,15 @@ const { register, login, getProfile } = require('./routes/auth');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Configurazione Prisma
+// Configurazione Prisma - Forza PostgreSQL
+const DATABASE_URL = process.env.DATABASE_URL || "postgresql://postgres.uqvdiqmioqnvywmkchma:Levinoliver18_@aws-1-eu-west-2.pooler.supabase.com:6543/postgres?pgbouncer=true";
+
+console.log('🔍 Using DATABASE_URL:', DATABASE_URL.substring(0, 50) + '...');
+
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: process.env.DATABASE_URL || "postgresql://postgres.uqvdiqmioqnvywmkchma:Levinoliver18_@aws-1-eu-west-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
+      url: DATABASE_URL
     }
   }
 });
