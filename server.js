@@ -84,6 +84,11 @@ app.post('/api/auth/registrati', register);
 app.post('/api/auth/login', login);
 app.get('/api/auth/me', getProfile);
 
+// TEST ENDPOINT
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Backend funzionante!', timestamp: new Date() });
+});
+
 // Percorso ai contenuti
 const CONTENT_PATH = path.join(__dirname, '..', 'files', 'src', 'data');
 
