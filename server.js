@@ -51,7 +51,8 @@ app.use(cors({
     ? [
         'https://lumenstudio-edu.netlify.app',
         'https://lumen-studio.netlify.app', 
-        'https://lumen-studio-2.netlify.app'
+        'https://lumen-studio-2.netlify.app',
+        'https://leafy-dango-48e237.netlify.app'
       ] 
     : ['http://localhost:3000', 'http://localhost:3003'],
   credentials: true,
