@@ -16,7 +16,13 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Configurazione Prisma
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  __internal: {
+    engine: {
+      binaryPath: undefined
+    }
+  }
+});
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
