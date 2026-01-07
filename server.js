@@ -1,7 +1,7 @@
 // SERVER BACKEND COMPLETO CON PRISMA
 // Gestisce tutti i contenuti: materie, quiz, simulazioni, gamification
 
-require('dotenv').config();
+// require('dotenv').config(); // DISABILITATO - SOLO DATABASE HARDCODED
 
 const express = require('express');
 const cors = require('cors');
