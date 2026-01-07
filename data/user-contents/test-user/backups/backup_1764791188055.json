@@ -1,0 +1,56 @@
+{
+  "id": "test-user",
+  "createdAt": "2025-11-23T20:34:26.290Z",
+  "collections": {
+    "Preferiti": {
+      "id": "68cd42b1-c16c-4f07-860a-f1a1fb58e344",
+      "nome": "Preferiti",
+      "tipo": "default",
+      "elementi": [],
+      "createdAt": "2025-11-23T20:34:26.301Z"
+    },
+    "Da Ripassare": {
+      "id": "84439850-2042-42e1-90fe-636da42a6840",
+      "nome": "Da Ripassare",
+      "tipo": "default",
+      "elementi": [],
+      "createdAt": "2025-11-23T20:34:26.301Z"
+    },
+    "Completati": {
+      "id": "343a35f5-a5f5-44d8-83dd-0409d1d20789",
+      "nome": "Completati",
+      "tipo": "default",
+      "elementi": [],
+      "createdAt": "2025-11-23T20:34:26.301Z"
+    },
+    "Difficili": {
+      "id": "9ae7bb69-db7c-452d-955b-519d0526f50e",
+      "nome": "Difficili",
+      "tipo": "default",
+      "elementi": [],
+      "createdAt": "2025-11-23T20:34:26.301Z"
+    }
+  },
+  "quiz": [],
+  "flashcards": [],
+  "mappe": [],
+  "stats": {
+    "totaleQuiz": 0,
+    "totaleFlashcards": 0,
+    "totaleMappe": 0,
+    "spazioUsato": 0,
+    "tempoStudio": 0,
+    "punteggio": 0,
+    "livello": 1,
+    "badges": []
+  },
+  "settings": {
+    "defaultCollection": "Preferiti",
+    "exportFormat": "json",
+    "autoSync": true,
+    "darkMode": false,
+    "notifiche": true,
+    "lingua": "it"
+  },
+  "achievements": []
+}
