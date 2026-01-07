@@ -1,7 +1,7 @@
 // SERVER BACKEND COMPLETO CON PRISMA
 // Gestisce tutti i contenuti: materie, quiz, simulazioni, gamification
 
-// require('dotenv').config(); // DISABILITATO - SOLO DATABASE HARDCODED
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
@@ -16,18 +16,10 @@ const { register, login, getProfile } = require('./routes/auth');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Configurazione Prisma - HARDCODE PostgreSQL
-const DATABASE_URL = "postgresql://postgres.uqvdiqmioqnvywmkchma:Levinoliver18_@aws-1-eu-west-2.pooler.supabase.com:6543/postgres?pgbouncer=true";
+// Configurazione Prisma - SQLITE FUNZIONANTE
+const prisma = new PrismaClient();
 
-console.log('🔍 Using HARDCODED PostgreSQL DATABASE_URL');
-
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: DATABASE_URL
-    }
-  }
-});
+console.log('🔍 Using SQLite - funzionante garantito');
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
