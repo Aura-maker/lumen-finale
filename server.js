@@ -89,6 +89,11 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend funzionante!', timestamp: new Date() });
 });
 
+// HEALTH CHECK
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', service: 'Lumen Studio Backend' });
+});
+
 // Percorso ai contenuti
 const CONTENT_PATH = path.join(__dirname, '..', 'files', 'src', 'data');
 
