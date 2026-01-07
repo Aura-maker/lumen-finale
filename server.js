@@ -16,14 +16,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Configurazione Prisma
-const prisma = new PrismaClient({
-  adapter: undefined, // Use default PostgreSQL adapter
-  __internal: {
-    engine: {
-      binaryPath: undefined
-    }
-  }
-});
+const prisma = new PrismaClient();
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });

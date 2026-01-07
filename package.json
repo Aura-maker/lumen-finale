@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@prisma/client": "^7.0.0",
+    "@prisma/client": "^5.22.0",
     "axios": "^1.13.2",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
@@ -21,7 +21,7 @@
     "pdf2pic": "^3.2.0",
     "pdfjs-dist": "^5.4.394",
     "pdfkit": "^0.17.2",
-    "prisma": "^7.0.0",
+    "prisma": "^5.22.0",
     "rate-limit-redis": "^4.2.0",
     "sharp": "^0.34.5",
     "socket.io": "^4.6.1",
