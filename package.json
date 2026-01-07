@@ -33,7 +33,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "build": "rm -rf node_modules/@prisma/client && npx prisma generate",
-    "postinstall": "rm -rf node_modules/@prisma/client && npx prisma generate"
+    "build": "rm -rf node_modules/@prisma/client && rm -rf .prisma && npx prisma generate",
+    "postinstall": "rm -rf node_modules/@prisma/client && rm -rf .prisma && npx prisma generate"
   }
 }
