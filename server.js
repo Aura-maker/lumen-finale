@@ -781,7 +781,7 @@ async function startServer() {
     app.listen(PORT, () => {
       console.log(`🚀 Server ImparaFacile avviato su porta ${PORT}`);
       console.log(`📡 API disponibili su http://localhost:${PORT}/api`);
-      console.log(`💾 Database SQLite: ${path.join(__dirname, 'prisma', 'dev.db')}`);
+      console.log(`💾 Database PostgreSQL: Supabase Cloud`);
       console.log('✅ Sistema completo attivo!');
     });
   } catch (error) {
