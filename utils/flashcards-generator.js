@@ -7,38 +7,55 @@ async function generateFlashcardsFromQuizzes(prisma) {
   console.log('\n🃏 === GENERAZIONE FLASHCARDS DA QUIZ ===\n');
   
   try {
+    // 0. CANCELLA TUTTE LE FLASHCARDS ESISTENTI
+    const deleted = await prisma.flashcard.deleteMany({});
+    console.log(`🗑️ Cancellate ${deleted.count} flashcards esistenti`);
+    
     // 1. Prendi tutti i quiz
     const allQuizzes = await prisma.quiz.findMany({
       include: {
         topic: {
           include: {
-            subject: true,
-            subtopics: true
+            subject: true
           }
         }
       }
     });
     
-    console.log(`📊 Trovati ${allQuizzes.length} quiz da convertire`);
+    console.log(`📊 Trovati ${allQuizzes.length} quiz da convertire\n`);
     
     let created = 0;
     let skipped = 0;
     
-    // 2. Per ogni quiz, crea una flashcard
+    // Cache per subtopics per topic
+    const subtopicCache = new Map();
+    
+    // 2. Per ogni quiz, crea UNA flashcard
     for (const quiz of allQuizzes) {
       try {
-        // Crea sottoargomento se non esiste
-        let subtopic = quiz.topic.subtopics[0];
+        // Ottieni o crea subtopic per questo topic
+        let subtopicId = subtopicCache.get(quiz.topicId);
         
-        if (!subtopic) {
-          subtopic = await prisma.subtopic.create({
-            data: {
-              title: 'Generale',
-              summary: `Contenuti generali di ${quiz.topic.title}`,
-              content: '',
-              topicId: quiz.topicId
-            }
+        if (!subtopicId) {
+          // Cerca subtopic esistente
+          let subtopic = await prisma.subtopic.findFirst({
+            where: { topicId: quiz.topicId }
           });
+          
+          // Se non esiste, crealo
+          if (!subtopic) {
+            subtopic = await prisma.subtopic.create({
+              data: {
+                title: 'Generale',
+                summary: `Contenuti di ${quiz.topic.title}`,
+                content: '',
+                topicId: quiz.topicId
+              }
+            });
+          }
+          
+          subtopicId = subtopic.id;
+          subtopicCache.set(quiz.topicId, subtopicId);
         }
         
         // Estrai domanda e risposta corretta
@@ -53,20 +70,20 @@ async function generateFlashcardsFromQuizzes(prisma) {
           data: {
             front,
             back,
-            subtopicId: subtopic.id
+            subtopicId
           }
         });
         
         created++;
         
-        if (created % 500 === 0) {
+        if (created % 1000 === 0) {
           console.log(`  ✅ ${created} flashcards create...`);
         }
         
       } catch (err) {
         skipped++;
-        if (skipped <= 5) {
-          console.error(`  ⚠️ Skip: ${err.message}`);
+        if (skipped <= 10) {
+          console.error(`  ⚠️ Skip quiz ${quiz.id}: ${err.message}`);
         }
       }
     }
