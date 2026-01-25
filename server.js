@@ -92,6 +92,32 @@ app.get('/api/_debug/quiz-batch', async (req, res) => {
   }
 });
 
+// ==================== DEBUG: GENERATE FLASHCARDS ====================
+app.get('/api/_debug/generate-flashcards', async (req, res) => {
+  try {
+    console.log('🃏 GENERAZIONE FLASHCARDS...');
+    const { generateFlashcardsFromQuizzes } = require('./utils/flashcards-generator');
+    const result = await generateFlashcardsFromQuizzes(prisma);
+    res.json({ success: true, message: 'Flashcards generate', ...result });
+  } catch (error) {
+    console.error('Errore flashcards:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ==================== DEBUG: GENERATE SIMULATIONS ====================
+app.get('/api/_debug/generate-simulations', async (req, res) => {
+  try {
+    console.log('📝 GENERAZIONE SIMULAZIONI...');
+    const { generateSimulationsFromQuizzes } = require('./utils/flashcards-generator');
+    const result = await generateSimulationsFromQuizzes(prisma);
+    res.json({ success: true, message: 'Simulazioni generate', ...result });
+  } catch (error) {
+    console.error('Errore simulazioni:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ==================== API: MATERIE ====================
 app.get('/api/materie', async (req, res) => {
   try {
@@ -204,15 +230,20 @@ app.get('/api/flashcards', async (req, res) => {
     const { materiaId, argomentoId, limit = 20 } = req.query;
     
     const where = {};
-    if (materiaId) where.topic = { subjectId: materiaId };
-    if (argomentoId) where.topicId = argomentoId;
+    if (argomentoId) {
+      where.subtopicId = argomentoId;
+    }
     
     const flashcards = await prisma.flashcard.findMany({
       where,
       take: parseInt(limit),
       include: {
-        topic: {
-          include: { subject: true }
+        subtopic: {
+          include: {
+            topic: {
+              include: { subject: true }
+            }
+          }
         }
       }
     });
@@ -221,8 +252,8 @@ app.get('/api/flashcards', async (req, res) => {
       id: f.id,
       fronte: f.front,
       retro: f.back,
-      materia: f.topic?.subject?.name || '',
-      argomento: f.topic?.title || ''
+      materia: f.subtopic?.topic?.subject?.name || '',
+      argomento: f.subtopic?.topic?.title || ''
     }));
     
     res.json({ flashcards: formatted });
