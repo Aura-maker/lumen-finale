@@ -114,9 +114,12 @@ async function getOrCreateTopic(prisma, materiaKey, argomento) {
 
 async function loadQuizBatch(prisma, offset = 0, limit = 500) {
   if (!cachedQuizzes) {
-    const QUIZ_FILE = path.join(__dirname, '..', 'files', 'src', 'data', 'quiz-generati', 'tutti-quiz.json');
+    // Path assoluto corretto per Render
+    const QUIZ_FILE = path.join(__dirname, '..', 'data', 'quiz-generati', 'tutti-quiz.json');
+    console.log('📂 Quiz file path:', QUIZ_FILE);
     const data = JSON.parse(fs.readFileSync(QUIZ_FILE, 'utf8'));
     cachedQuizzes = data.quiz || [];
+    console.log(`✅ Caricati ${cachedQuizzes.length} quiz dal JSON`);
   }
   
   const batch = cachedQuizzes.slice(offset, offset + limit);

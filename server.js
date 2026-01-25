@@ -240,15 +240,14 @@ app.get('/api/simulazioni', async (req, res) => {
     const where = materiaId ? { subjectId: materiaId } : {};
     
     const simulations = await prisma.simulation.findMany({
-      where,
-      include: { subject: true }
+      where
     });
     
     const formatted = simulations.map(s => ({
       id: s.id,
       titolo: s.title,
       descrizione: s.description || '',
-      materia: s.subject?.name || '',
+      materiaId: s.subjectId || '',
       domande: JSON.parse(s.questions || '[]'),
       tipologia: s.type || 'maturita'
     }));
