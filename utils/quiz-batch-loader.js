@@ -114,7 +114,7 @@ async function getOrCreateTopic(prisma, materiaKey, argomento) {
 
 async function loadQuizBatch(prisma, offset = 0, limit = 500) {
   if (!cachedQuizzes) {
-    const QUIZ_FILE = path.join(__dirname, '..', 'data', 'quiz-generati', 'tutti-quiz.json');
+    const QUIZ_FILE = path.join(__dirname, '..', 'files', 'src', 'data', 'quiz-generati', 'tutti-quiz.json');
     const data = JSON.parse(fs.readFileSync(QUIZ_FILE, 'utf8'));
     cachedQuizzes = data.quiz || [];
   }

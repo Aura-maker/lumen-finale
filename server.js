@@ -13,7 +13,7 @@ const helmet = require('helmet');
 const { sanitizeMiddleware, sanitizeAIOutput, validateQuizInput, validateFlashcardInput, validateSummaryInput } = require('./middleware/sanitize.middleware');
 const { register, login, getProfile } = require('./routes/auth');
 const { loadAllContent, clearContentTables } = require('./utils/content-manager');
-const { getMaterieIndirizzo } = require('./files/src/config/indirizzi-scolastici');
+const { getMaterieIndirizzo } = require('./data/config/indirizzi-scolastici');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
