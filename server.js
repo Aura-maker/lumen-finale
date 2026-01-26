@@ -67,12 +67,23 @@ try {
 
 // ==================== GAMIFICATION ROUTES ====================
 try {
+  console.log('🔍 Tentativo caricamento gamification routes...');
   const gamificationRoutes = require('./routes/gamification');
+  console.log('🔍 Require completato, mounting routes...');
   app.use('/api/gamification', gamificationRoutes);
   app.use('/api/gamification-v2', gamificationRoutes);
-  console.log('✅ Gamification routes caricati');
+  console.log('✅ Gamification routes caricati e montati');
 } catch (error) {
-  console.error('❌ ERRORE caricamento gamification routes:', error.message);
+  console.error('❌ ERRORE CRITICO caricamento gamification routes:');
+  console.error('   Messaggio:', error.message);
+  console.error('   Stack:', error.stack);
+  // Crea endpoint fallback per debugging
+  app.get('/api/gamification/*', (req, res) => {
+    res.status(500).json({ 
+      error: 'Gamification routes non caricati', 
+      details: error.message 
+    });
+  });
 }
 
 // ==================== DEBUG: COUNTS ====================
