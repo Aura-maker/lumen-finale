@@ -10,8 +10,26 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 const prisma = new PrismaClient();
 
-// CORS permissivo per tutti gli origin
-app.use(cors());
+// CORS configurato per supportare credentials (withCredentials: true da axios)
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://lumenedu.netlify.app',
+      'http://localhost:3000',
+      'http://localhost:4000'
+    ];
+    // Permetti richieste senza origin (Postman, curl, ecc.)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Permetti comunque per compatibilità
+    }
+  },
+  credentials: true, // Necessario per withCredentials: true
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 
 // ==================== HEALTH CHECK ====================
