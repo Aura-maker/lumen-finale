@@ -24,6 +24,9 @@ app.get('/', (req, res) => {
     status: 'ImparaFacile Backend Running',
     endpoints: [
       'GET /health',
+      'POST /api/auth/registrati',
+      'POST /api/auth/login',
+      'GET /api/auth/me',
       'GET /api/_debug/counts',
       'GET /api/_debug/populate-fixed-ids',
       'GET /api/_debug/quiz-batch',
@@ -34,6 +37,10 @@ app.get('/', (req, res) => {
     ]
   });
 });
+
+// ==================== AUTH ROUTES ====================
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
 
 // ==================== DEBUG: COUNTS ====================
 app.get('/api/_debug/counts', async (req, res) => {
