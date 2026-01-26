@@ -1,3 +1,5 @@
+const express = require('express');
+const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
@@ -185,8 +187,9 @@ async function getProfile(req, res) {
   }
 }
 
-module.exports = {
-  register,
-  login,
-  getProfile
-};
+// Configura le route
+router.post('/registrati', register);
+router.post('/login', login);
+router.get('/me', getProfile);
+
+module.exports = router;
