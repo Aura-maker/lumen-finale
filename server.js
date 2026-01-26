@@ -65,26 +65,105 @@ try {
   console.error('❌ ERRORE caricamento auth routes:', error.message);
 }
 
-// ==================== GAMIFICATION ROUTES ====================
-try {
-  console.log('🔍 Tentativo caricamento gamification routes...');
-  const gamificationRoutes = require('./routes/gamification');
-  console.log('🔍 Require completato, mounting routes...');
-  app.use('/api/gamification', gamificationRoutes);
-  app.use('/api/gamification-v2', gamificationRoutes);
-  console.log('✅ Gamification routes caricati e montati');
-} catch (error) {
-  console.error('❌ ERRORE CRITICO caricamento gamification routes:');
-  console.error('   Messaggio:', error.message);
-  console.error('   Stack:', error.stack);
-  // Crea endpoint fallback per debugging
-  app.get('/api/gamification/*', (req, res) => {
-    res.status(500).json({ 
-      error: 'Gamification routes non caricati', 
-      details: error.message 
-    });
-  });
+// ==================== GAMIFICATION ROUTES (INLINE) ====================
+// Middleware auth per gamification
+function gamifAuth(req, res, next) {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (!token) {
+    req.userId = null;
+    return next();
+  }
+  try {
+    const jwt = require('jsonwebtoken');
+    const JWT_SECRET = process.env.JWT_SECRET || 'lumen-studio-secret-key-2024';
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.userId = decoded.userId;
+    next();
+  } catch (error) {
+    req.userId = null;
+    next();
+  }
 }
+
+// GET /api/gamification/profilo
+app.get('/api/gamification/profilo', gamifAuth, async (req, res) => {
+  try {
+    if (!req.userId) {
+      return res.status(401).json({ error: 'Non autenticato' });
+    }
+    const user = await prisma.user.findUnique({
+      where: { id: req.userId },
+      select: { id: true, username: true, email: true, xp: true, level: true, streak: true, createdAt: true }
+    });
+    if (!user) {
+      return res.status(404).json({ error: 'Utente non trovato' });
+    }
+    res.json({
+      profilo: {
+        ...user,
+        xpPercentuale: ((user.xp % 100) / 100) * 100,
+        prossimo_livello: user.level + 1
+      }
+    });
+  } catch (error) {
+    console.error('Errore profilo gamification:', error);
+    res.status(500).json({ error: 'Errore server' });
+  }
+});
+
+// GET /api/gamification/notifiche
+app.get('/api/gamification/notifiche', gamifAuth, async (req, res) => {
+  try {
+    res.json({ notifiche: [], non_lette: 0 });
+  } catch (error) {
+    console.error('Errore notifiche:', error);
+    res.status(500).json({ error: 'Errore server' });
+  }
+});
+
+// GET /api/gamification-v2/sfide
+app.get('/api/gamification-v2/sfide', gamifAuth, async (req, res) => {
+  try {
+    res.json({ sfide: [], disponibili: 0 });
+  } catch (error) {
+    console.error('Errore sfide:', error);
+    res.status(500).json({ error: 'Errore server' });
+  }
+});
+
+// POST /api/gamification/aggiungi-xp
+app.post('/api/gamification/aggiungi-xp', gamifAuth, async (req, res) => {
+  try {
+    if (!req.userId) {
+      return res.status(401).json({ error: 'Non autenticato' });
+    }
+    const { xp } = req.body;
+    if (!xp || xp <= 0) {
+      return res.status(400).json({ error: 'XP non valido' });
+    }
+    const user = await prisma.user.findUnique({ where: { id: req.userId } });
+    if (!user) {
+      return res.status(404).json({ error: 'Utente non trovato' });
+    }
+    const nuovoXP = user.xp + xp;
+    const nuovoLivello = Math.floor(nuovoXP / 100) + 1;
+    const updatedUser = await prisma.user.update({
+      where: { id: req.userId },
+      data: { xp: nuovoXP, level: nuovoLivello }
+    });
+    res.json({
+      success: true,
+      xp: updatedUser.xp,
+      level: updatedUser.level,
+      levelUp: nuovoLivello > user.level
+    });
+  } catch (error) {
+    console.error('Errore aggiungi XP:', error);
+    res.status(500).json({ error: 'Errore server' });
+  }
+});
+
+console.log('✅ Gamification routes inline caricati');
 
 // ==================== DEBUG: COUNTS ====================
 app.get('/api/_debug/counts', async (req, res) => {
