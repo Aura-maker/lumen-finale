@@ -45,10 +45,6 @@ app.get('/', (req, res) => {
       'POST /api/auth/registrati',
       'POST /api/auth/login',
       'GET /api/auth/me',
-      'GET /api/gamification/profilo',
-      'GET /api/gamification/notifiche',
-      'GET /api/gamification-v2/sfide',
-      'POST /api/gamification/aggiungi-xp',
       'GET /api/_debug/counts',
       'GET /api/_debug/populate-fixed-ids',
       'GET /api/_debug/quiz-batch',
@@ -67,6 +63,16 @@ try {
   console.log('✅ Auth routes caricati');
 } catch (error) {
   console.error('❌ ERRORE caricamento auth routes:', error.message);
+}
+
+// ==================== GAMIFICATION ROUTES ====================
+try {
+  const gamificationRoutes = require('./routes/gamification');
+  app.use('/api/gamification', gamificationRoutes);
+  app.use('/api/gamification-v2', gamificationRoutes);
+  console.log('✅ Gamification routes caricati');
+} catch (error) {
+  console.error('❌ ERRORE caricamento gamification routes:', error.message);
 }
 
 // ==================== DEBUG: COUNTS ====================
