@@ -39,8 +39,13 @@ app.get('/', (req, res) => {
 });
 
 // ==================== AUTH ROUTES ====================
-const authRoutes = require('./routes/auth');
-app.use('/api/auth', authRoutes);
+try {
+  const authRoutes = require('./routes/auth');
+  app.use('/api/auth', authRoutes);
+  console.log('✅ Auth routes caricati');
+} catch (error) {
+  console.error('❌ ERRORE caricamento auth routes:', error.message);
+}
 
 // ==================== DEBUG: COUNTS ====================
 app.get('/api/_debug/counts', async (req, res) => {
